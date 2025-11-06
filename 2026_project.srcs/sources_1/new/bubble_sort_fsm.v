@@ -20,6 +20,8 @@ module bubble_sort_fsm(
     output reg [2:0] compare_idx1, // First index being compared
     output reg [2:0] compare_idx2, // Second index being compared
     output reg swap_flag,         // High when swap is occurring
+    output reg [4:0] anim_progress, // Animation progress (0-7 per phase)
+    output reg [1:0] anim_phase,    // Animation phase (0-3 for 4-phase swap)
     output reg sorting,           // High when actively sorting
     output reg done               // High when sort is complete
 );
@@ -30,8 +32,8 @@ module bubble_sort_fsm(
     // FSM States
     localparam IDLE        = 3'b000;
     localparam COMPARE     = 3'b001;
-    localparam SWAP        = 3'b010;
-    localparam SWAP_WAIT   = 3'b110;
+    localparam SWAP_START  = 3'b010;
+    localparam SWAP_ANIM   = 3'b110;
     localparam INCREMENT   = 3'b011;
     localparam NEXT_PASS   = 3'b100;
     localparam DONE        = 3'b101;
@@ -41,9 +43,18 @@ module bubble_sort_fsm(
     // Sorting variables
     reg [2:0] i;              // Current position in array
     reg [2:0] pass_count;     // Number of passes completed
-    reg [7:0] temp1, temp2;   // Temporary storage for swap (need both values)
+    reg [7:0] temp;           // Temporary storage for swap
     reg swapped_this_pass;    // Flag to detect if any swaps occurred
-    reg swap_done;            // Flag to pulse swap_flag for one cycle only
+
+    // Animation variables
+    reg [6:0] anim_counter;
+    localparam ANIM_FRAMES = 60;   // Number of frames per phase (60 frames * 4 phases = 240 total, ~4 seconds per swap)
+    reg [1:0] phase_counter;      // Tracks which phase of animation (0-3)
+
+    // Frame tick generator for animations (~60 Hz)
+    // At 100MHz clock: 100,000,000 / 60 = 1,666,667 cycles per frame
+    reg [20:0] frame_counter;
+    wire frame_tick = (frame_counter >= 21'd1666666);  // ~60Hz at 100MHz
 
     // Pre-loaded patterns - Single digits 0-9
     // array[0]=LEFTMOST digit, array[5]=RIGHTMOST digit
@@ -57,6 +68,16 @@ module bubble_sort_fsm(
     localparam [47:0] PATTERN_REVERSE = {8'd5, 8'd4, 8'd3, 8'd2, 8'd1, 8'd0};
     // Pattern 3: Custom pattern (3,5,1,4,2,0)
     localparam [47:0] PATTERN_CUSTOM  = {8'd3, 8'd5, 8'd1, 8'd4, 8'd2, 8'd0};
+
+    // Frame counter for animation
+    always @(posedge clk or posedge rst) begin
+        if (rst)
+            frame_counter <= 0;
+        else if (frame_tick)
+            frame_counter <= 0;
+        else
+            frame_counter <= frame_counter + 1;
+    end
 
     // State register
     always @(posedge clk or posedge rst) begin
@@ -81,18 +102,21 @@ module bubble_sort_fsm(
                     // Check if we need to swap (sort ASCENDING: smallest to largest)
                     // array[0] should be smallest, array[5] should be largest
                     if (array[i] > array[i+1])
-                        next_state = SWAP;
+                        next_state = SWAP_START;
                     else
                         next_state = INCREMENT;
                 end
             end
 
-            SWAP: begin
-                next_state = SWAP_WAIT;
+            SWAP_START: begin
+                next_state = SWAP_ANIM;
             end
 
-            SWAP_WAIT: begin
-                if (step_pulse)
+            SWAP_ANIM: begin
+                // Stay in this state until animation completes
+                next_state = SWAP_ANIM;  // Explicitly stay here
+                // Complete when all 4 phases are done
+                if (phase_counter >= 3 && anim_counter >= ANIM_FRAMES - 1)
                     next_state = INCREMENT;
             end
 
@@ -129,13 +153,16 @@ module bubble_sort_fsm(
             compare_idx1 <= 0;
             compare_idx2 <= 1;
             swap_flag <= 0;
+            anim_progress <= 0;
+            anim_phase <= 0;
             sorting <= 0;
             done <= 0;
             i <= 0;
             pass_count <= 0;
-            temp1 <= 0;
-            temp2 <= 0;
+            temp <= 0;
             swapped_this_pass <= 0;
+            anim_counter <= 0;
+            phase_counter <= 0;
         end else begin
             case (state)
                 IDLE: begin
@@ -151,39 +178,72 @@ module bubble_sort_fsm(
                     compare_idx1 <= 0;
                     compare_idx2 <= 1;
                     swap_flag <= 0;
+                    anim_progress <= 0;
+                    anim_phase <= 0;
                     sorting <= 0;
                     done <= 0;
                     swapped_this_pass <= 0;
+                    anim_counter <= 0;
+                    phase_counter <= 0;
                 end
 
                 COMPARE: begin
                     sorting <= 1;
                     compare_idx1 <= i;
                     compare_idx2 <= i + 1;
-                    swap_flag <= 0;  // Clear swap flag before next comparison
+                    swap_flag <= 0;
+                    anim_progress <= 0;
+                    anim_phase <= 0;
                     done <= 0;
+                    anim_counter <= 0;
+                    phase_counter <= 0;
                 end
 
-                SWAP: begin
-                    // Save BOTH values first
-                    temp1 <= array[i];     // Save the first element
-                    temp2 <= array[i+1];   // Save the second element
+                SWAP_START: begin
+                    temp <= array[i];
                     swap_flag <= 1;
+                    anim_progress <= 0;
+                    anim_phase <= 0;
+                    anim_counter <= 0;
+                    phase_counter <= 0;
                     swapped_this_pass <= 1;
-                    swap_done <= 1;
                 end
 
-                SWAP_WAIT: begin
-                    // Now swap using the saved values
-                    array[i] <= temp2;     // Put second element in first position
-                    array[i+1] <= temp1;   // Put first element in second position
-                    swap_flag <= 1;  // Keep flag high during swap
+                SWAP_ANIM: begin
+                    // Keep swap flag high during animation
+                    swap_flag <= 1;
+
+                    // DIAGNOSTIC: Force constant values to test rendering
+                    anim_progress <= 5'd30;  // Force to 30 (middle of range)
+                    anim_phase <= 2'b01;     // Force to phase 1
+
+                    // SIMPLIFIED FOR DEBUG: Increment every clock cycle (very fast animation)
+                    // Once working, we can slow it down with frame_tick
+                    if (anim_counter == ANIM_FRAMES - 1) begin
+                        // Reached end of this phase
+                        if (phase_counter < 3) begin
+                            // Move to next phase
+                            phase_counter <= phase_counter + 1;
+                            anim_counter <= 0;
+                        end else begin
+                            // Phase 3 complete - do the swap and hold position
+                            array[i] <= array[i+1];
+                            array[i+1] <= temp;
+                            // Stay at phase 3, frame 59 (don't increment)
+                        end
+                    end else begin
+                        // Continue incrementing within this phase
+                        anim_counter <= anim_counter + 1;
+                    end
                 end
 
                 INCREMENT: begin
                     i <= i + 1;
-                    swap_flag <= 0;  // Clear swap flag after SWAP state
-                    swap_done <= 0;
+                    swap_flag <= 0;
+                    anim_progress <= 0;
+                    anim_phase <= 0;
+                    anim_counter <= 0;
+                    phase_counter <= 0;
                 end
 
                 NEXT_PASS: begin
@@ -198,8 +258,17 @@ module bubble_sort_fsm(
                     sorting <= 0;
                     done <= 1;
                     swap_flag <= 0;
+                    anim_progress <= 0;
+                    anim_phase <= 0;
                     compare_idx1 <= 3'b111;  // Invalid index to indicate no comparison
                     compare_idx2 <= 3'b111;
+                end
+
+                default: begin
+                    // Ensure all outputs are driven in unexpected states
+                    swap_flag <= 0;
+                    anim_progress <= 0;
+                    anim_phase <= 0;
                 end
             endcase
         end

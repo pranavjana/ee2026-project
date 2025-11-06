@@ -31,7 +31,7 @@ set_property ip_output_repo c:/Users/prana/OneDrive/Documents/2026_project/2026_
 set_property ip_cache_permissions {read write} [current_project]
 read_verilog -library xil_defaultlib {
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Oled_Display.v
-  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/bubble_sort_fsm.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/bubble_sort_fsm_animated.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/button_debounce_5btn.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/clock_divider.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/merge_sort_controller.v

@@ -109,6 +109,8 @@ module bubble_sort_top(
     wire [2:0] auto_compare_idx1;
     wire [2:0] auto_compare_idx2;
     wire auto_swap_flag;
+    wire [4:0] auto_anim_progress;
+    wire [1:0] auto_anim_phase;
     wire auto_sorting;
     wire auto_done;
 
@@ -128,6 +130,8 @@ module bubble_sort_top(
         .compare_idx1(auto_compare_idx1),
         .compare_idx2(auto_compare_idx2),
         .swap_flag(auto_swap_flag),
+        .anim_progress(auto_anim_progress),
+        .anim_phase(auto_anim_phase),
         .sorting(auto_sorting),
         .done(auto_done)
     );
@@ -181,6 +185,8 @@ module bubble_sort_top(
     wire [2:0] compare_idx1 = tutorial_mode ? tutorial_cursor_pos : auto_compare_idx1;
     wire [2:0] compare_idx2 = tutorial_mode ? tutorial_compare_pos : auto_compare_idx2;
     wire swap_flag = tutorial_mode ? 1'b0 : auto_swap_flag;
+    wire [4:0] anim_progress = tutorial_mode ? 5'b0 : auto_anim_progress;
+    wire [1:0] anim_phase = tutorial_mode ? 2'b0 : auto_anim_phase;
     wire sorting = tutorial_mode ? (!tutorial_is_sorted) : auto_sorting;
     wire done = tutorial_mode ? tutorial_is_sorted : auto_done;
 
@@ -226,6 +232,8 @@ module bubble_sort_top(
         .compare_idx1(compare_idx1),
         .compare_idx2(compare_idx2),
         .swap_flag(swap_flag),
+        .anim_progress(anim_progress),
+        .anim_phase(anim_phase),
         .sorting(sorting),
         .done(done),
         .pixel_data(auto_pixel_data)

@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date             : Thu Nov  6 17:34:09 2025
+| Date             : Thu Nov  6 23:34:42 2025
 | Host             : Eldentop running 64-bit major release  (build 9200)
 | Command          : report_power -file sorting_visualizer_top_power_routed.rpt -pb sorting_visualizer_top_power_summary_routed.pb -rpx sorting_visualizer_top_power_routed.rpx
 | Design           : sorting_visualizer_top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.117        |
+| Total On-Chip Power (W)  | 0.122        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.045        |
+| Dynamic (W)              | 0.050        |
 | Device Static (W)        | 0.072        |
 | Effective TJA (C/W)      | 5.0          |
 | Max Ambient (C)          | 84.4         |
@@ -53,17 +53,17 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.006 |        3 |       --- |             --- |
-| Slice Logic    |     0.013 |     5121 |       --- |             --- |
-|   LUT as Logic |     0.012 |     3157 |     20800 |           15.18 |
-|   CARRY4       |    <0.001 |      270 |      8150 |            3.31 |
-|   Register     |    <0.001 |      916 |     41600 |            2.20 |
+| Slice Logic    |     0.016 |     6121 |       --- |             --- |
+|   LUT as Logic |     0.015 |     3919 |     20800 |           18.84 |
+|   CARRY4       |    <0.001 |      332 |      8150 |            4.07 |
+|   Register     |    <0.001 |      946 |     41600 |            2.27 |
 |   BUFG         |    <0.001 |        2 |        32 |            6.25 |
-|   F7/F8 Muxes  |    <0.001 |       35 |     32600 |            0.11 |
+|   F7/F8 Muxes  |    <0.001 |       34 |     32600 |            0.10 |
 |   Others       |     0.000 |       38 |       --- |             --- |
-| Signals        |     0.011 |     3610 |       --- |             --- |
+| Signals        |     0.013 |     4345 |       --- |             --- |
 | I/O            |     0.015 |       50 |       106 |           47.17 |
 | Static Power   |     0.072 |          |           |                 |
-| Total          |     0.117 |          |           |                 |
+| Total          |     0.122 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -73,7 +73,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.040 |       0.030 |      0.010 |
+| Vccint    |       1.000 |     0.044 |       0.035 |      0.010 |
 | Vccaux    |       1.800 |     0.013 |       0.001 |      0.013 |
 | Vcco33    |       3.300 |     0.005 |       0.004 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -142,11 +142,11 @@ Table of Contents
 +-------------------------------------------+-----------+
 | Name                                      | Power (W) |
 +-------------------------------------------+-----------+
-| sorting_visualizer_top                    |     0.045 |
+| sorting_visualizer_top                    |     0.050 |
 |   bubble_btn_debouncer                    |     0.002 |
 |   bubble_clk_div                          |    <0.001 |
-|   bubble_fsm                              |     0.002 |
-|   bubble_tutorial                         |     0.006 |
+|   bubble_fsm                              |     0.005 |
+|   bubble_tutorial                         |     0.008 |
 |   merge_controller                        |     0.008 |
 |   merge_display_engine                    |    <0.001 |
 |     answer_box_gen[0].answer_box_renderer |    <0.001 |

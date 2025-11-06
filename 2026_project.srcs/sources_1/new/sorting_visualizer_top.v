@@ -238,6 +238,8 @@ module sorting_visualizer_top(
     wire [7:0] bubble_array3, bubble_array4, bubble_array5;
     wire [2:0] bubble_compare_idx1, bubble_compare_idx2;
     wire bubble_swap_flag, bubble_sorting, bubble_done;
+    wire [5:0] bubble_anim_progress;
+    wire [1:0] bubble_anim_phase;
     wire [15:0] bubble_pixel_data_auto, bubble_pixel_data_tutorial;
     wire [15:0] bubble_pixel_data;
 
@@ -301,7 +303,8 @@ module sorting_visualizer_top(
         .clk_6p25mhz(),  // Not used, we use shared clk_6p25MHz
         .clk_1hz_pulse(bubble_clk_1hz_pulse)
     );
-    assign bubble_clk_1hz_pulse_gated = bubble_clk_1hz_pulse && !bubble_paused;
+    // Gate step pulse during animation to prevent state machine from advancing during swap
+    assign bubble_clk_1hz_pulse_gated = bubble_clk_1hz_pulse && !bubble_paused && !bubble_swap_flag;
 
     // Bubble Sort FSM (auto mode)
     bubble_sort_fsm bubble_fsm (
@@ -319,6 +322,8 @@ module sorting_visualizer_top(
         .compare_idx1(bubble_compare_idx1),
         .compare_idx2(bubble_compare_idx2),
         .swap_flag(bubble_swap_flag),
+        .anim_progress(bubble_anim_progress),
+        .anim_phase(bubble_anim_phase),
         .sorting(bubble_sorting),
         .done(bubble_done)
     );
@@ -360,6 +365,8 @@ module sorting_visualizer_top(
     wire [2:0] bubble_final_compare_idx1 = bubble_tutorial_mode ? bubble_tutorial_cursor_pos : bubble_compare_idx1;
     wire [2:0] bubble_final_compare_idx2 = bubble_tutorial_mode ? bubble_tutorial_compare_pos : bubble_compare_idx2;
     wire bubble_final_swap_flag = bubble_tutorial_mode ? 1'b0 : bubble_swap_flag;
+    wire [5:0] bubble_final_anim_progress = bubble_tutorial_mode ? 6'b0 : bubble_anim_progress;
+    wire [1:0] bubble_final_anim_phase = bubble_tutorial_mode ? 2'b0 : bubble_anim_phase;
     wire bubble_final_sorting = bubble_tutorial_mode ? (!bubble_tutorial_is_sorted) : bubble_sorting;
     wire bubble_final_done = bubble_tutorial_mode ? bubble_tutorial_is_sorted : bubble_done;
 
@@ -375,6 +382,8 @@ module sorting_visualizer_top(
         .compare_idx1(bubble_final_compare_idx1),
         .compare_idx2(bubble_final_compare_idx2),
         .swap_flag(bubble_final_swap_flag),
+        .anim_progress(bubble_final_anim_progress),
+        .anim_phase(bubble_final_anim_phase),
         .sorting(bubble_final_sorting),
         .done(bubble_final_done),
         .pixel_data(bubble_pixel_data_auto)

@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date         : Thu Nov  6 17:33:55 2025
+| Date         : Thu Nov  6 23:34:28 2025
 | Host         : Eldentop running 64-bit major release  (build 9200)
 | Command      : report_utilization -file sorting_visualizer_top_utilization_placed.rpt -pb sorting_visualizer_top_utilization_placed.pb
 | Design       : sorting_visualizer_top
@@ -31,14 +31,14 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs              | 3157 |     0 |     20800 | 15.18 |
-|   LUT as Logic          | 3157 |     0 |     20800 | 15.18 |
+| Slice LUTs              | 3919 |     0 |     20800 | 18.84 |
+|   LUT as Logic          | 3919 |     0 |     20800 | 18.84 |
 |   LUT as Memory         |    0 |     0 |      9600 |  0.00 |
-| Slice Registers         |  916 |     0 |     41600 |  2.20 |
-|   Register as Flip Flop |  916 |     0 |     41600 |  2.20 |
+| Slice Registers         |  946 |     0 |     41600 |  2.27 |
+|   Register as Flip Flop |  946 |     0 |     41600 |  2.27 |
 |   Register as Latch     |    0 |     0 |     41600 |  0.00 |
-| F7 Muxes                |   32 |     0 |     16300 |  0.20 |
-| F8 Muxes                |    3 |     0 |      8150 |  0.04 |
+| F7 Muxes                |   33 |     0 |     16300 |  0.20 |
+| F8 Muxes                |    1 |     0 |      8150 |  0.01 |
 +-------------------------+------+-------+-----------+-------+
 
 
@@ -55,7 +55,7 @@ Table of Contents
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 37    |          Yes |           - |          Set |
-| 378   |          Yes |           - |        Reset |
+| 408   |          Yes |           - |        Reset |
 | 7     |          Yes |         Set |            - |
 | 494   |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
@@ -67,21 +67,21 @@ Table of Contents
 +-------------------------------------------+------+-------+-----------+-------+
 |                 Site Type                 | Used | Fixed | Available | Util% |
 +-------------------------------------------+------+-------+-----------+-------+
-| Slice                                     |  992 |     0 |      8150 | 12.17 |
-|   SLICEL                                  |  665 |     0 |           |       |
-|   SLICEM                                  |  327 |     0 |           |       |
-| LUT as Logic                              | 3157 |     0 |     20800 | 15.18 |
+| Slice                                     | 1214 |     0 |      8150 | 14.90 |
+|   SLICEL                                  |  847 |     0 |           |       |
+|   SLICEM                                  |  367 |     0 |           |       |
+| LUT as Logic                              | 3919 |     0 |     20800 | 18.84 |
 |   using O5 output only                    |    2 |       |           |       |
-|   using O6 output only                    | 2452 |       |           |       |
-|   using O5 and O6                         |  703 |       |           |       |
+|   using O6 output only                    | 3067 |       |           |       |
+|   using O5 and O6                         |  850 |       |           |       |
 | LUT as Memory                             |    0 |     0 |      9600 |  0.00 |
 |   LUT as Distributed RAM                  |    0 |     0 |           |       |
 |   LUT as Shift Register                   |    0 |     0 |           |       |
-| LUT Flip Flop Pairs                       |  564 |     0 |     20800 |  2.71 |
-|   fully used LUT-FF pairs                 |   80 |       |           |       |
-|   LUT-FF pairs with one unused LUT output |  470 |       |           |       |
-|   LUT-FF pairs with one unused Flip Flop  |  463 |       |           |       |
-| Unique Control Sets                       |   70 |       |           |       |
+| LUT Flip Flop Pairs                       |  610 |     0 |     20800 |  2.93 |
+|   fully used LUT-FF pairs                 |   72 |       |           |       |
+|   LUT-FF pairs with one unused LUT output |  523 |       |           |       |
+|   LUT-FF pairs with one unused Flip Flop  |  523 |       |           |       |
+| Unique Control Sets                       |   72 |       |           |       |
 +-------------------------------------------+------+-------+-----------+-------+
 * Note: Review the Control Sets Report for more information regarding control sets.
 
@@ -176,22 +176,22 @@ Table of Contents
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| LUT6     | 1553 |                 LUT |
-| LUT2     |  666 |                 LUT |
-| LUT4     |  617 |                 LUT |
-| LUT5     |  541 |                 LUT |
+| LUT6     | 1886 |                 LUT |
+| LUT2     |  781 |                 LUT |
+| LUT4     |  774 |                 LUT |
+| LUT5     |  749 |                 LUT |
 | FDRE     |  494 |        Flop & Latch |
-| FDCE     |  378 |        Flop & Latch |
-| LUT3     |  328 |                 LUT |
-| CARRY4   |  270 |          CarryLogic |
-| LUT1     |  155 |                 LUT |
+| LUT3     |  416 |                 LUT |
+| FDCE     |  408 |        Flop & Latch |
+| CARRY4   |  332 |          CarryLogic |
+| LUT1     |  163 |                 LUT |
 | FDPE     |   37 |        Flop & Latch |
 | OBUF     |   36 |                  IO |
-| MUXF7    |   32 |               MuxFx |
+| MUXF7    |   33 |               MuxFx |
 | IBUF     |   14 |                  IO |
 | FDSE     |    7 |        Flop & Latch |
-| MUXF8    |    3 |               MuxFx |
 | BUFG     |    3 |               Clock |
+| MUXF8    |    1 |               MuxFx |
 +----------+------+---------------------+
 
 

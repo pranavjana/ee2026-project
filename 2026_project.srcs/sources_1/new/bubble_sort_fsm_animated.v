@@ -19,7 +19,8 @@ module bubble_sort_fsm(
     output reg [2:0] compare_idx1, // First index being compared
     output reg [2:0] compare_idx2, // Second index being compared
     output reg swap_flag,         // High during swap
-    output reg [4:0] anim_progress, // Animation progress (0-31 for smooth interpolation)
+    output reg [5:0] anim_progress, // Animation progress (0-59 within each phase)
+    output reg [1:0] anim_phase,    // Animation phase (0-3 for 4-phase swap)
     output reg sorting,           // High when actively sorting
     output reg done               // High when sort is complete
 );
@@ -43,20 +44,24 @@ module bubble_sort_fsm(
     reg [2:0] pass_count;     // Number of passes completed
     reg [7:0] temp;           // Temporary storage for swap
     reg swapped_this_pass;    // Flag to detect if any swaps occurred
+    reg swap_done;            // Flag to track if swap has been performed
+    reg just_swapped;         // Flag to prevent immediate step_pulse after swap
 
     // Animation counter (counts frames for smooth swap)
-    reg [4:0] anim_counter;
-    localparam ANIM_FRAMES = 16;  // Number of frames for swap animation
+    reg [7:0] anim_counter;       // Now counts 0-120 continuously (30 frames × 4 phases)
+    localparam ANIM_FRAMES = 30;   // Number of frames per phase (30 frames = 0.5 sec per phase, 2 sec total)
+    localparam TOTAL_ANIM_FRAMES = 120;  // Total frames for all 4 phases
 
-    // Pre-loaded patterns
-    localparam [47:0] PATTERN_RANDOM  = {8'd200, 8'd80, 8'd160, 8'd40, 8'd120, 8'd240};
-    localparam [47:0] PATTERN_SORTED  = {8'd40, 8'd80, 8'd120, 8'd160, 8'd200, 8'd240};
-    localparam [47:0] PATTERN_REVERSE = {8'd240, 8'd200, 8'd160, 8'd120, 8'd80, 8'd40};
-    localparam [47:0] PATTERN_CUSTOM  = {8'd100, 8'd220, 8'd60, 8'd180, 8'd140, 8'd20};
+    // Pre-loaded patterns - Single digits 0-9
+    // array[0]=LEFTMOST digit, array[5]=RIGHTMOST digit
+    localparam [47:0] PATTERN_RANDOM  = {8'd5, 8'd2, 8'd4, 8'd1, 8'd3, 8'd0};
+    localparam [47:0] PATTERN_SORTED  = {8'd0, 8'd1, 8'd2, 8'd3, 8'd4, 8'd5};
+    localparam [47:0] PATTERN_REVERSE = {8'd5, 8'd4, 8'd3, 8'd2, 8'd1, 8'd0};
+    localparam [47:0] PATTERN_CUSTOM  = {8'd3, 8'd5, 8'd1, 8'd4, 8'd2, 8'd0};
 
-    // Frame counter for animation (runs at OLED refresh rate ~60Hz)
-    reg [19:0] frame_counter;
-    wire frame_tick = (frame_counter == 20'd104166);  // ~60Hz at 6.25MHz
+    // Frame counter for animation (~60Hz at 100MHz)
+    reg [20:0] frame_counter;
+    wire frame_tick = (frame_counter >= 21'd1666666);  // ~60Hz at 100MHz
 
     always @(posedge clk or posedge rst) begin
         if (rst)
@@ -86,7 +91,8 @@ module bubble_sort_fsm(
             end
 
             COMPARE: begin
-                if (step_pulse) begin
+                // Only process step_pulse if we haven't just completed a swap
+                if (step_pulse && !just_swapped) begin
                     if (array[i] > array[i+1])
                         next_state = SWAP_START;
                     else
@@ -99,7 +105,8 @@ module bubble_sort_fsm(
             end
 
             SWAP_ANIM: begin
-                if (anim_counter >= ANIM_FRAMES - 1)
+                // Complete when all animation frames are done AND swap is complete
+                if (anim_counter >= TOTAL_ANIM_FRAMES && swap_done)
                     next_state = INCREMENT;
             end
 
@@ -134,6 +141,7 @@ module bubble_sort_fsm(
             compare_idx2 <= 1;
             swap_flag <= 0;
             anim_progress <= 0;
+            anim_phase <= 0;
             sorting <= 0;
             done <= 0;
             i <= 0;
@@ -141,6 +149,8 @@ module bubble_sort_fsm(
             temp <= 0;
             swapped_this_pass <= 0;
             anim_counter <= 0;
+            swap_done <= 0;
+            just_swapped <= 0;
         end else begin
             case (state)
                 IDLE: begin
@@ -156,10 +166,13 @@ module bubble_sort_fsm(
                     compare_idx2 <= 1;
                     swap_flag <= 0;
                     anim_progress <= 0;
+                    anim_phase <= 0;
                     sorting <= 0;
                     done <= 0;
                     swapped_this_pass <= 0;
                     anim_counter <= 0;
+                    swap_done <= 0;
+                    just_swapped <= 0;
                 end
 
                 COMPARE: begin
@@ -168,29 +181,65 @@ module bubble_sort_fsm(
                     compare_idx2 <= i + 1;
                     swap_flag <= 0;
                     anim_progress <= 0;
+                    anim_phase <= 0;
                     done <= 0;
                     anim_counter <= 0;
+                    // Clear just_swapped flag on first step_pulse in COMPARE state
+                    if (step_pulse && just_swapped)
+                        just_swapped <= 0;
                 end
 
                 SWAP_START: begin
+                    // Save current value to temp - DON'T swap yet!
                     temp <= array[i];
                     swap_flag <= 1;
                     anim_progress <= 0;
+                    anim_phase <= 0;
                     anim_counter <= 0;
                     swapped_this_pass <= 1;
+                    swap_done <= 0;  // Swap hasn't happened yet
                 end
 
                 SWAP_ANIM: begin
-                    // Increment animation counter each frame
-                    if (frame_tick) begin
-                        anim_counter <= anim_counter + 1;
-                        anim_progress <= anim_counter;
-                    end
+                    // Keep swap flag high during animation
+                    swap_flag <= 1;
 
-                    // Complete swap at end of animation
-                    if (anim_counter == ANIM_FRAMES - 1) begin
-                        array[i] <= array[i+1];
-                        array[i+1] <= temp;
+                    // Derive current phase from counter value (0-29=phase0, 30-59=phase1, etc.)
+                    // Use comparisons for exact 30-frame boundaries
+                    if (anim_counter < 30)
+                        anim_phase <= 2'b00;
+                    else if (anim_counter < 60)
+                        anim_phase <= 2'b01;
+                    else if (anim_counter < 90)
+                        anim_phase <= 2'b10;
+                    else
+                        anim_phase <= 2'b11;
+
+                    // Progress within current phase (0-29), using modulo 30
+                    if (anim_counter < 30)
+                        anim_progress <= anim_counter[5:0];
+                    else if (anim_counter < 60)
+                        anim_progress <= anim_counter - 30;
+                    else if (anim_counter < 90)
+                        anim_progress <= anim_counter - 60;
+                    else
+                        anim_progress <= anim_counter - 90;
+
+                    // Increment animation counter continuously at 60Hz
+                    if (frame_tick) begin
+                        if (anim_counter >= TOTAL_ANIM_FRAMES - 1) begin
+                            // All animation complete - perform the swap!
+                            if (!swap_done) begin
+                                array[i] <= array[i+1];
+                                array[i+1] <= temp;
+                                swap_done <= 1;
+                            end
+                            // Hold counter at 240 to signal completion
+                            anim_counter <= TOTAL_ANIM_FRAMES;
+                        end else begin
+                            // Continue incrementing continuously (no resets between phases!)
+                            anim_counter <= anim_counter + 1;
+                        end
                     end
                 end
 
@@ -198,7 +247,13 @@ module bubble_sort_fsm(
                     i <= i + 1;
                     swap_flag <= 0;
                     anim_progress <= 0;
+                    anim_phase <= 0;
                     anim_counter <= 0;
+                    // Set just_swapped flag if coming from a swap, then clear swap_done
+                    if (swap_done) begin
+                        just_swapped <= 1;
+                        swap_done <= 0;
+                    end
                 end
 
                 NEXT_PASS: begin
@@ -207,6 +262,7 @@ module bubble_sort_fsm(
                     swapped_this_pass <= 0;
                     compare_idx1 <= 0;
                     compare_idx2 <= 1;
+                    just_swapped <= 0;
                 end
 
                 DONE: begin
@@ -214,6 +270,7 @@ module bubble_sort_fsm(
                     done <= 1;
                     swap_flag <= 0;
                     anim_progress <= 0;
+                    anim_phase <= 0;
                     compare_idx1 <= 3'b111;
                     compare_idx2 <= 3'b111;
                 end
