@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date                      : Thu Nov  6 23:34:28 2025
+| Date                      : Fri Nov  7 02:51:21 2025
 | Host                      : Eldentop running 64-bit major release  (build 9200)
 | Command                   : report_io -file sorting_visualizer_top_io_placed.rpt
 | Design                    : sorting_visualizer_top
@@ -266,7 +266,7 @@ Table of Contents
 | W10        |             | Dedicated  | TDI_0                        | Config        |             |       0 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | W11        |             | Dedicated  | M1_0                         | Config        |             |       0 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | W12        |             |            | GND                          | GND           |             |         |            |      |                     |                      |     0.0 |            |           |          |      |                  |              |                   |              |
-| W13        |             | High Range | IO_L22P_T3_A05_D21_14        | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
+| W13        | sw[7]       | High Range | IO_L22P_T3_A05_D21_14        | INPUT         | LVCMOS33    |      14 |            |      |                     |                 NONE |         | FIXED      |           |          |      | NONE             |              |                   |              |
 | W14        |             | High Range | IO_L22N_T3_A04_D20_14        | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | W15        | sw[4]       | High Range | IO_L21N_T3_DQS_A06_D22_14    | INPUT         | LVCMOS33    |      14 |            |      |                     |                 NONE |         | FIXED      |           |          |      | NONE             |              |                   |              |
 | W16        | sw[2]       | High Range | IO_L20P_T3_A08_D24_14        | INPUT         | LVCMOS33    |      14 |            |      |                     |                 NONE |         | FIXED      |           |          |      | NONE             |              |                   |              |

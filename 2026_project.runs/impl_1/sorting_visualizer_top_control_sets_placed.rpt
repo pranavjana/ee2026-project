@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date         : Thu Nov  6 23:34:28 2025
+| Date         : Fri Nov  7 02:51:21 2025
 | Host         : Eldentop running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file sorting_visualizer_top_control_sets_placed.rpt
 | Design       : sorting_visualizer_top
@@ -23,8 +23,8 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Number of unique control sets                            |    72 |
-| Unused register locations in slices containing registers |   164 |
+| Number of unique control sets                            |   137 |
+| Unused register locations in slices containing registers |   338 |
 +----------------------------------------------------------+-------+
 
 
@@ -34,12 +34,13 @@ Table of Contents
 +--------+--------------+
 | Fanout | Control Sets |
 +--------+--------------+
-|      2 |            6 |
-|      8 |            2 |
-|     10 |            5 |
-|     12 |           10 |
-|     14 |            7 |
-|    16+ |           42 |
+|      2 |            2 |
+|      4 |            2 |
+|      8 |            6 |
+|     10 |           12 |
+|     12 |           15 |
+|     14 |            9 |
+|    16+ |           91 |
 +--------+--------------+
 
 
@@ -49,93 +50,158 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |             158 |           39 |
-| No           | No                    | Yes                    |             314 |           83 |
-| No           | Yes                   | No                     |             286 |           50 |
-| Yes          | No                    | No                     |              66 |           19 |
-| Yes          | No                    | Yes                    |             576 |          126 |
-| Yes          | Yes                   | No                     |             492 |           84 |
+| No           | No                    | No                     |             548 |          157 |
+| No           | No                    | Yes                    |             498 |          146 |
+| No           | Yes                   | No                     |             530 |          106 |
+| Yes          | No                    | No                     |            2584 |          797 |
+| Yes          | No                    | Yes                    |             786 |          174 |
+| Yes          | Yes                   | No                     |             692 |          123 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
 4. Detailed Control Set Information
 -----------------------------------
 
-+-----------------------+--------------------------------------------------+----------------------------------------------------+------------------+----------------+
-|      Clock Signal     |                   Enable Signal                  |                  Set/Reset Signal                  | Slice Load Count | Bel Load Count |
-+-----------------------+--------------------------------------------------+----------------------------------------------------+------------------+----------------+
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_u_sync_i_1_n_0          |                                                    |                1 |              2 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_l_sync_i_1_n_0          |                                                    |                1 |              2 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_d_sync_i_1_n_0          |                                                    |                1 |              2 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_r_sync_i_1_n_0          |                                                    |                1 |              2 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_c_sync_i_1_n_0          |                                                    |                1 |              2 |
-| ~clk_6p25MHz_reg_BUFG |                                                  |                                                    |                1 |              2 |
-|  clk_movement_BUFG    | merge_controller/hint_timer                      | merge_controller/hint_timer[5]_i_1_n_0             |                2 |              8 |
-|  clk_IBUF_BUFG        | bubble_tutorial/anim_counter[3]_i_1__0_n_0       | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                1 |              8 |
-|  clk_movement_BUFG    | merge_controller/separator_visible[4]_i_1_n_0    | merge_controller/btn_reset_merge                   |                3 |             10 |
-|  clk_movement_BUFG    | merge_controller/flash_timer[4]_i_1_n_0          | merge_controller/btn_reset_merge                   |                2 |             10 |
-|  clk_IBUF_BUFG        | bubble_tutorial/anim_frame[4]_i_1_n_0            | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                4 |             10 |
-|  clk_movement_BUFG    | merge_controller/pulse_timer                     | merge_controller/pulse_state4_out                  |                1 |             10 |
-|  clk_movement_BUFG    | merge_controller/tutorial_merge_step_target      |                                                    |                3 |             10 |
-|  clk_movement_BUFG    | merge_controller/array_positions_y[1][5]_i_1_n_0 | merge_controller/btn_reset_merge                   |                3 |             12 |
-|  clk_movement_BUFG    | merge_controller/array_positions_y[3][5]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             12 |
-|  clk_movement_BUFG    | merge_controller/array_positions_y[4][5]_i_1_n_0 | merge_controller/btn_reset_merge                   |                3 |             12 |
-|  clk_movement_BUFG    | merge_controller/target_y[0][5]_i_1_n_0          | merge_controller/btn_reset_merge                   |                2 |             12 |
-|  clk_IBUF_BUFG        | bubble_tutorial/feedback_timer                   | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                2 |             12 |
-|  clk_IBUF_BUFG        | bubble_fsm/compare_idx1[2]_i_1_n_0               | bubble_fsm/btn_reset_bubble                        |                5 |             12 |
-|  clk_movement_BUFG    | merge_controller/array_positions_y[2][5]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             12 |
-|  clk_movement_BUFG    | merge_controller/array_positions_y[0][5]_i_1_n_0 | merge_controller/btn_reset_merge                   |                3 |             12 |
-|  clk_movement_BUFG    | merge_controller/array_positions_y[5][5]_i_1_n_0 | merge_controller/btn_reset_merge                   |                3 |             12 |
-|  clk_IBUF_BUFG        | bubble_tutorial/progress_percent[6]_i_1_n_0      | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                2 |             12 |
-|  clk_IBUF_BUFG        | bubble_fsm/anim_counter[6]_i_1_n_0               | bubble_fsm/btn_reset_bubble                        |                3 |             14 |
-|  clk_movement_BUFG    | merge_controller/array_positions_x[5][6]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             14 |
-|  clk_movement_BUFG    | merge_controller/array_positions_x[4][6]_i_1_n_0 | merge_controller/btn_reset_merge                   |                3 |             14 |
-|  clk_movement_BUFG    | merge_controller/array_positions_x[3][6]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             14 |
-|  clk_movement_BUFG    | merge_controller/array_positions_x[0][6]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             14 |
-|  clk_movement_BUFG    | merge_controller/array_positions_x[1][6]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             14 |
-|  clk_movement_BUFG    | merge_controller/array_positions_x[2][6]_i_1_n_0 | merge_controller/btn_reset_merge                   |                2 |             14 |
-|  clk_IBUF_BUFG        | bubble_fsm/array[2][7]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                        |                3 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/array[3][7]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                        |                6 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/array[5][7]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                        |                5 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/temp                                  | bubble_fsm/btn_reset_bubble                        |                3 |             16 |
-|  clk_IBUF_BUFG        | bubble_tutorial/array[1][7]_i_1__0_n_0           | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                5 |             16 |
-|  clk_IBUF_BUFG        | bubble_tutorial/array[0][7]_i_1__0_n_0           | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                7 |             16 |
-|  clk_IBUF_BUFG        | bubble_tutorial/array[3][7]_i_1__0_n_0           | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                5 |             16 |
-|  clk_IBUF_BUFG        | bubble_tutorial/array[4][7]_i_1__0_n_0           | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                3 |             16 |
-|  clk_IBUF_BUFG        | bubble_tutorial/array[2][7]_i_1__0_n_0           | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                3 |             16 |
-|  clk_IBUF_BUFG        | bubble_tutorial/array[5][7]_i_1__0_n_0           | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |                2 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/array[0][7]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                        |                5 |             16 |
-|  clk_movement_BUFG    | merge_controller/sort_timer[7]_i_1_n_0           | merge_controller/btn_reset_merge                   |                3 |             16 |
-|  clk_movement_BUFG    | merge_controller/step_timer[7]_i_1_n_0           | merge_controller/btn_reset_merge                   |                3 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/array[1][7]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                        |                5 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/array[4][7]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                        |                4 |             16 |
-|  clk_IBUF_BUFG        | bubble_fsm/swap_flag_i_1_n_0                     | bubble_fsm/btn_reset_bubble                        |                6 |             18 |
-|  clk_movement_BUFG    | merge_controller/element_correct                 |                                                    |                7 |             22 |
-|  clk_movement_BUFG    | merge_controller/answer_colors                   |                                                    |                4 |             24 |
-|  clk_movement_BUFG    | merge_controller/answer_colors                   | merge_controller/answer_colors[0][1]_i_1_n_0       |                8 |             32 |
-|  clk_IBUF_BUFG        |                                                  | clear                                              |                4 |             32 |
-| ~clk_6p25MHz_reg_BUFG |                                                  | oled_display/oled_reset                            |                5 |             34 |
-| ~clk_6p25MHz_reg_BUFG | oled_display/delay[0]_i_1_n_0                    | oled_display/oled_reset                            |                5 |             40 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_counter_d[0]_i_2_n_0    | bubble_btn_debouncer/btn_counter_d[0]_i_1_n_0      |                5 |             40 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_counter_c[0]_i_2_n_0    | bubble_btn_debouncer/btn_counter_c[0]_i_1_n_0      |                5 |             40 |
-|  clk_IBUF_BUFG        | merge_controller/debounce_up[19]_i_1_n_0         | merge_controller/btn_reset_merge                   |                7 |             40 |
-|  clk_IBUF_BUFG        | merge_controller/debounce_left[19]_i_1_n_0       | merge_controller/btn_reset_merge                   |                8 |             40 |
-|  clk_IBUF_BUFG        | merge_controller/debounce_down[19]_i_1_n_0       | merge_controller/btn_reset_merge                   |                8 |             40 |
-|  clk_IBUF_BUFG        | merge_controller/debounce_center[19]_i_1_n_0     | merge_controller/btn_reset_merge                   |                8 |             40 |
-|  clk_IBUF_BUFG        | merge_controller/debounce_right[19]_i_1_n_0      | merge_controller/btn_reset_merge                   |                8 |             40 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/sel                         | bubble_btn_debouncer/btn_counter_l[0]_i_1_n_0      |                5 |             40 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_counter_u[0]_i_2_n_0    | bubble_btn_debouncer/btn_counter_u[0]_i_1_n_0      |                5 |             40 |
-|  clk_IBUF_BUFG        | bubble_btn_debouncer/btn_counter_r[0]_i_2_n_0    | bubble_btn_debouncer/btn_counter_r[0]_i_1_n_0      |                5 |             40 |
-|  clk_IBUF_BUFG        |                                                  | clk_counter_movement[0]_i_1_n_0                    |                6 |             42 |
-|  clk_IBUF_BUFG        |                                                  | bubble_frame_tick_i_1_n_0                          |                6 |             42 |
-|  clk_IBUF_BUFG        |                                                  | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0 |               11 |             46 |
-|  clk_IBUF_BUFG        |                                                  | merge_controller/btn_reset_merge                   |               16 |             52 |
-|  clk_movement_BUFG    |                                                  |                                                    |               13 |             54 |
-| ~clk_6p25MHz_reg_BUFG | oled_display/state                               | oled_display/oled_reset                            |                9 |             64 |
-| ~clk_6p25MHz_reg_BUFG |                                                  | oled_display/spi_word[39]_i_1_n_0                  |               18 |             90 |
-|  clk_IBUF_BUFG        |                                                  |                                                    |               25 |            102 |
-|  clk_IBUF_BUFG        |                                                  | bubble_fsm/btn_reset_bubble                        |               23 |            126 |
-|  clk_movement_BUFG    |                                                  | merge_controller/btn_reset_merge                   |               44 |            136 |
-+-----------------------+--------------------------------------------------+----------------------------------------------------+------------------+----------------+
++-------------------------+------------------------------------------------------+-----------------------------------------------------+------------------+----------------+
+|       Clock Signal      |                     Enable Signal                    |                   Set/Reset Signal                  | Slice Load Count | Bel Load Count |
++-------------------------+------------------------------------------------------+-----------------------------------------------------+------------------+----------------+
+| ~clk_6p25MHz_reg_BUFG   |                                                      |                                                     |                1 |              2 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_down[19]_i_1_n_0           | merge_controller/state[2]_i_2_n_0                   |                1 |              2 |
+|  selection_clk_1ms_BUFG |                                                      | selection_text_anim/counter[7]_i_3_n_0              |                2 |              4 |
+|  clk_IBUF_BUFG          |                                                      | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                1 |              4 |
+|  clk_IBUF_BUFG          | bubble_tutorial/anim_counter[3]_i_1_n_0              | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                2 |              8 |
+|  selection_clk_1ms_BUFG | selection_controller/state[3]_i_1_n_0                | selection_controller/reset_selection_sort           |                2 |              8 |
+|  clk_IBUF_BUFG          |                                                      | insertion_main_fsm/p1_red_x_pixel_reg               |                4 |              8 |
+|  clk_movement_BUFG      | merge_controller/hint_timer                          | merge_controller/hint_timer[5]_i_1_n_0              |                2 |              8 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_right[19]_i_1_n_0          | merge_controller/state[0]_rep_i_2_n_0               |                1 |              8 |
+|  selection_clk_1ms_BUFG | selection_controller/tutorial_state[3]_i_1_n_0       | selection_controller/reset_selection_sort           |                3 |              8 |
+|  selection_clk_1ms_BUFG | selection_controller/btnD_debounce[4]_i_1_n_0        | selection_controller/reset_selection_sort           |                2 |             10 |
+|  clk_movement_BUFG      | merge_controller/tutorial_merge_step_target          |                                                     |                3 |             10 |
+|  clk_movement_BUFG      | merge_controller/separator_visible[4]_i_1_n_0        | merge_controller/btn_reset_merge                    |                3 |             10 |
+|  selection_clk_1ms_BUFG | selection_controller/btnR_debounce[4]_i_1_n_0        | selection_controller/reset_selection_sort           |                1 |             10 |
+|  selection_clk_1ms_BUFG | selection_controller/btnR_debounce_demo[4]_i_1_n_0   | selection_controller/reset_selection_sort           |                1 |             10 |
+|  selection_clk_1ms_BUFG | selection_controller/btnC_debounce_tut[4]_i_1_n_0    | selection_controller/reset_selection_sort           |                1 |             10 |
+|  selection_clk_1ms_BUFG | selection_controller/btnU_debounce[4]_i_1_n_0        | selection_controller/reset_selection_sort           |                2 |             10 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_pointer[4]_i_1_n_0     | insertion_main_fsm/SR[0]                            |                2 |             10 |
+|  selection_clk_1ms_BUFG | selection_controller/btnL_debounce[4]_i_1_n_0        | selection_controller/reset_selection_sort           |                2 |             10 |
+|  clk_movement_BUFG      | merge_controller/pulse_timer                         | merge_controller/pulse_timer[4]_i_1_n_0             |                2 |             10 |
+|  clk_movement_BUFG      | merge_controller/flash_timer[4]_i_1_n_0              | merge_controller/state[0]_rep_i_2_n_0               |                2 |             10 |
+|  clk_IBUF_BUFG          | bubble_tutorial/anim_frame[4]_i_1_n_0                | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                4 |             10 |
+|  clk_movement_BUFG      | merge_controller/target_y[0][5]_i_1_n_0              | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             12 |
+|  clk_IBUF_BUFG          | insertion_tut_sort_engine/swap_idx1[2]_i_1__0_n_0    | insertion_main_fsm/SS[0]                            |                3 |             12 |
+|  clk_IBUF_BUFG          | insertion_tut_sort_engine/sorted_boundary            | insertion_main_fsm/SS[0]                            |                3 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_y[4][5]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                2 |             12 |
+|  clk_IBUF_BUFG          | insertion_tut_sort_engine/compare_idx1[2]_i_1__1_n_0 | insertion_main_fsm/SS[0]                            |                2 |             12 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/compare_idx1[2]_i_2__0_n_0     | insertion_sort_engine/swap_idx1[2]_i_1_n_0          |                3 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_y[5][5]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             12 |
+|  clk_IBUF_BUFG          | bubble_tutorial/feedback_timer                       | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                2 |             12 |
+|  clk_IBUF_BUFG          | bubble_tutorial/progress_percent[6]_i_1_n_0          | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                4 |             12 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/compare_idx1[2]_i_2__0_n_0     | insertion_sort_engine/compare_idx1[2]_i_1_n_0       |                3 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_y[2][5]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                2 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_y[1][5]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_y[0][5]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             12 |
+|  clk_IBUF_BUFG          | bubble_fsm/compare_idx1[2]_i_1__0_n_0                | bubble_fsm/btn_reset_bubble                         |                2 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_y[3][5]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             12 |
+|  clk_movement_BUFG      | merge_controller/array_positions_x[0][6]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                2 |             14 |
+|  clk_movement_BUFG      |                                                      | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                4 |             14 |
+|  clk_movement_BUFG      | merge_controller/array_positions_x[2][6]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             14 |
+|  clk_IBUF_BUFG          | bubble_fsm/anim_counter[6]_i_1_n_0                   | bubble_fsm/btn_reset_bubble                         |                3 |             14 |
+|  clk_IBUF_BUFG          |                                                      | oled_display/insertion_sort_active                  |                6 |             14 |
+|  clk_movement_BUFG      | merge_controller/array_positions_x[5][6]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                2 |             14 |
+|  clk_movement_BUFG      | merge_controller/array_positions_x[3][6]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             14 |
+|  clk_movement_BUFG      | merge_controller/array_positions_x[4][6]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             14 |
+|  clk_movement_BUFG      | merge_controller/array_positions_x[1][6]_i_1_n_0     | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                3 |             14 |
+|  clk_IBUF_BUFG          | bubble_tutorial/array[1][7]_i_1__0_n_0               | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                4 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/array[0][7]_i_1_n_0                       | bubble_fsm/btn_reset_bubble                         |                5 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/array[2][7]_i_1_n_0                       | bubble_fsm/btn_reset_bubble                         |                5 |             16 |
+|  clk_movement_BUFG      | merge_controller/step_timer[7]_i_1_n_0               | merge_controller/state[0]_rep_i_2_n_0               |                3 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/array[1][7]_i_1_n_0                       | bubble_fsm/btn_reset_bubble                         |                5 |             16 |
+|  clk_IBUF_BUFG          | bubble_tutorial/array[5][7]_i_1__0_n_0               | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                3 |             16 |
+|  selection_clk_1ms_BUFG | selection_text_anim/counter[7]_i_1_n_0               | selection_text_anim/counter[7]_i_3_n_0              |                3 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/temp                                      | bubble_fsm/btn_reset_bubble                         |                2 |             16 |
+|  clk_IBUF_BUFG          | bubble_tutorial/array[3][7]_i_1__0_n_0               | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                4 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/array[5][7]_i_1_n_0                       | bubble_fsm/btn_reset_bubble                         |                4 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/array[4][7]_i_1_n_0                       | bubble_fsm/btn_reset_bubble                         |                3 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/array[3][7]_i_1_n_0                       | bubble_fsm/btn_reset_bubble                         |                4 |             16 |
+|  clk_IBUF_BUFG          | bubble_tutorial/array[4][7]_i_1__0_n_0               | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                5 |             16 |
+|  clk_IBUF_BUFG          | bubble_tutorial/array[2][7]_i_1__0_n_0               | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                5 |             16 |
+|  clk_movement_BUFG      | merge_controller/sort_timer[7]_i_1_n_0               | merge_controller/cursor_right_ack_sync[1]_i_1_n_0   |                6 |             16 |
+|  clk_IBUF_BUFG          | bubble_tutorial/array[0][7]_i_1__0_n_0               | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |                3 |             16 |
+|  clk_IBUF_BUFG          | bubble_fsm/swap_flag_i_1_n_0                         | bubble_fsm/btn_reset_bubble                         |                5 |             18 |
+|  selection_clk_1ms_BUFG | selection_controller/sort_delay_counter[9]_i_1_n_0   | selection_controller/reset_selection_sort           |                5 |             20 |
+|  clk_IBUF_BUFG          |                                                      | merge_controller/state[0]_rep_i_2_n_0               |                5 |             22 |
+|  clk_movement_BUFG      | merge_controller/element_correct                     |                                                     |                4 |             22 |
+|  selection_clk_1ms_BUFG | selection_controller/feedback_timer                  | selection_controller/reset_selection_sort           |                5 |             22 |
+|  selection_clk_1ms_BUFG | selection_controller/tutorial_timer[11]_i_1_n_0      | selection_controller/reset_selection_sort           |                7 |             24 |
+|  clk_movement_BUFG      | merge_controller/answer_colors                       |                                                     |                5 |             24 |
+|  clk_IBUF_BUFG          |                                                      | merge_controller/state[2]_i_2_n_0                   |               10 |             26 |
+|  clk_IBUF_BUFG          | insertion_renderer/render_state                      | insertion_renderer/addr_counter[0]_i_1_n_0          |                4 |             26 |
+|  clk_IBUF_BUFG          |                                                      | insertion_main_fsm/SS[0]                            |                8 |             28 |
+|  clk_IBUF_BUFG          | insertion_renderer/fb_wr_addr[12]_i_1_n_0            |                                                     |                5 |             32 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_right[19]_i_1_n_0          | merge_controller/state[2]_i_2_n_0                   |                7 |             32 |
+|  clk_IBUF_BUFG          |                                                      | selection_clk_div_1ms/clk_1ms                       |                4 |             32 |
+|  clk_IBUF_BUFG          |                                                      | clk_counter_6p25MHz[0]_i_1_n_0                      |                4 |             32 |
+|  clk_movement_BUFG      | merge_controller/answer_colors                       | merge_controller/answer_colors[0][1]_i_1_n_0        |                6 |             32 |
+| ~clk_6p25MHz_reg_BUFG   |                                                      | oled_display/oled_reset                             |                7 |             34 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_down[19]_i_1_n_0           | merge_controller/state[0]_rep_i_2_n_0               |                8 |             38 |
+|  clk_IBUF_BUFG          | bubble_btn_debouncer/btn_counter_d[0]_i_2_n_0        | bubble_btn_debouncer/btn_counter_d[0]_i_1_n_0       |                5 |             40 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_center[19]_i_1_n_0         | merge_controller/state[2]_i_2_n_0                   |               10 |             40 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_left[19]_i_1_n_0           | merge_controller/state[2]_i_2_n_0                   |                8 |             40 |
+|  clk_IBUF_BUFG          | merge_controller/debounce_up[19]_i_1_n_0             | merge_controller/state[0]_rep_i_2_n_0               |                7 |             40 |
+| ~clk_6p25MHz_reg_BUFG   | oled_display/delay[0]_i_1_n_0                        | oled_display/oled_reset                             |                5 |             40 |
+|  clk_IBUF_BUFG          | bubble_btn_debouncer/btn_counter_u[0]_i_2_n_0        | bubble_btn_debouncer/btn_counter_u[0]_i_1_n_0       |                5 |             40 |
+|  clk_IBUF_BUFG          | bubble_btn_debouncer/btn_counter_r[0]_i_2_n_0        | bubble_btn_debouncer/btn_counter_r[0]_i_1_n_0       |                5 |             40 |
+|  clk_IBUF_BUFG          | bubble_btn_debouncer/sel                             | bubble_btn_debouncer/btn_counter_l[0]_i_1_n_0       |                5 |             40 |
+|  clk_IBUF_BUFG          | bubble_btn_debouncer/btn_counter_c[0]_i_2_n_0        | bubble_btn_debouncer/btn_counter_c[0]_i_1_n_0       |                5 |             40 |
+|  clk_IBUF_BUFG          |                                                      | clk_counter_movement[0]_i_1_n_0                     |                6 |             42 |
+|  clk_IBUF_BUFG          |                                                      | insertion_tut_input_engine/cursor_pos[2]_i_1__0_n_0 |                9 |             42 |
+|  clk_IBUF_BUFG          |                                                      | clear                                               |                6 |             42 |
+|  clk_IBUF_BUFG          |                                                      | bubble_tutorial/FSM_sequential_state[2]_i_1__0_n_0  |               13 |             46 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/step_delay_reg[0]_0            | insertion_main_fsm/step_delay_reg[24]               |                7 |             50 |
+|  selection_clk_1ms_BUFG | selection_controller/intro_timer[25]_i_1_n_0         | selection_controller/reset_selection_sort           |               11 |             52 |
+|  clk_movement_BUFG      |                                                      |                                                     |               14 |             54 |
+|  clk_IBUF_BUFG          | insertion_tut_sort_engine/delay_counter[26]_i_1_n_0  | insertion_main_fsm/SS[0]                            |               12 |             54 |
+|  clk_IBUF_BUFG          |                                                      | insertion_clk_gen/p_6_in                            |                9 |             58 |
+|  clk_movement_BUFG      |                                                      | merge_controller/state[0]_rep_i_2_n_0               |               21 |             60 |
+|  clk_movement_BUFG      |                                                      | merge_controller/state[2]_i_2_n_0                   |               19 |             62 |
+|  clk_IBUF_BUFG          |                                                      | insertion_main_fsm/SR[0]                            |               17 |             62 |
+| ~clk_6p25MHz_reg_BUFG   | oled_display/FSM_onehot_state[31]_i_2_n_0            | oled_display/oled_reset                             |                8 |             64 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[30][2]_i_1_n_0 |                                                     |               26 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[29][2]_i_1_n_0 |                                                     |               22 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[3][2]_i_1_n_0  |                                                     |               29 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[17][2]_i_1_n_0 |                                                     |               20 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[16][2]_i_1_n_0 |                                                     |               28 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[15][2]_i_1_n_0 |                                                     |               25 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[0][2]_i_1_n_0  |                                                     |               27 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[18][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[14][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[13][2]_i_1_n_0 |                                                     |               25 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[12][2]_i_1_n_0 |                                                     |               28 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[11][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[24][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[20][2]_i_1_n_0 |                                                     |               20 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[10][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[7][2]_i_1_n_0  |                                                     |               20 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[23][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[19][2]_i_1_n_0 |                                                     |               24 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[2][2]_i_1_n_0  |                                                     |               29 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[26][2]_i_1_n_0 |                                                     |               19 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[21][2]_i_1_n_0 |                                                     |               21 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[22][2]_i_1_n_0 |                                                     |               28 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[28][2]_i_1_n_0 |                                                     |               23 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[5][2]_i_1_n_0  |                                                     |               27 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[4][2]_i_1_n_0  |                                                     |               27 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[25][2]_i_1_n_0 |                                                     |               21 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[1][2]_i_1_n_0  |                                                     |               26 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[27][2]_i_1_n_0 |                                                     |               19 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[8][2]_i_1_n_0  |                                                     |               26 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[6][2]_i_1_n_0  |                                                     |               27 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[9][2]_i_1_n_0  |                                                     |               29 |             78 |
+|  clk_IBUF_BUFG          | insertion_sort_engine/history_i_index[31][2]_i_1_n_0 |                                                     |               26 |             78 |
+| ~clk_6p25MHz_reg_BUFG   |                                                      | oled_display/spi_word[39]_i_1_n_0                   |               13 |             90 |
+|  clk_IBUF_BUFG          |                                                      | bubble_fsm/btn_reset_bubble                         |               24 |            126 |
+|  selection_clk_1ms_BUFG |                                                      | selection_controller/reset_selection_sort           |               60 |            180 |
+|  clk_IBUF_BUFG          |                                                      |                                                     |              142 |            492 |
++-------------------------+------------------------------------------------------+-----------------------------------------------------+------------------+----------------+
 
 

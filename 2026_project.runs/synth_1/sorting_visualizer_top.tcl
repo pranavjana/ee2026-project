@@ -30,14 +30,27 @@ set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Users/prana/OneDrive/Documents/2026_project/2026_project.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 read_verilog -library xil_defaultlib {
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Clock_Generator.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Font_ROM_4x6.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Font_ROM_5x7_Bold.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Frame_Buffer.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Main_FSM.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Oled_Display.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Oled_Renderer.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Sort_Engine.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Tutorial_Input_Engine.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/Tutorial_Sort_Engine.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/bubble_sort_fsm_animated.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/button_debounce_5btn.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/clock_divider.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/clock_divider_1ms.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/display_generator.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/merge_sort_controller.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/merge_sort_display.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/merge_sort_numbers.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/pixel_generator.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/selection_sort_controller.v
+  C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/text_animator.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/tutorial_fsm.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/tutorial_pixel_generator.v
   C:/Users/prana/OneDrive/Documents/2026_project/2026_project.srcs/sources_1/new/sorting_visualizer_top.v

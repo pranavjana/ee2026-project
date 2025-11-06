@@ -1,0 +1,9 @@
+# Vivado generated files
+*.jou
+*.log
+*.rpt
+*.dcp
+*.str
+*.vdi
+*.runs/
+*.cache/

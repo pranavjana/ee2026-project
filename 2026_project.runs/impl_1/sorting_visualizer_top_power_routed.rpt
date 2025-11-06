@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date             : Thu Nov  6 23:34:42 2025
+| Date             : Fri Nov  7 02:52:02 2025
 | Host             : Eldentop running 64-bit major release  (build 9200)
 | Command          : report_power -file sorting_visualizer_top_power_routed.rpt -pb sorting_visualizer_top_power_summary_routed.pb -rpx sorting_visualizer_top_power_routed.rpx
 | Design           : sorting_visualizer_top
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.122        |
+| Total On-Chip Power (W)  | 0.298        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.050        |
+| Dynamic (W)              | 0.226        |
 | Device Static (W)        | 0.072        |
 | Effective TJA (C/W)      | 5.0          |
-| Max Ambient (C)          | 84.4         |
-| Junction Temperature (C) | 25.6         |
+| Max Ambient (C)          | 83.5         |
+| Junction Temperature (C) | 26.5         |
 | Confidence Level         | Low          |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -52,18 +52,19 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.006 |        3 |       --- |             --- |
-| Slice Logic    |     0.016 |     6121 |       --- |             --- |
-|   LUT as Logic |     0.015 |     3919 |     20800 |           18.84 |
-|   CARRY4       |    <0.001 |      332 |      8150 |            4.07 |
-|   Register     |    <0.001 |      946 |     41600 |            2.27 |
-|   BUFG         |    <0.001 |        2 |        32 |            6.25 |
-|   F7/F8 Muxes  |    <0.001 |       34 |     32600 |            0.10 |
-|   Others       |     0.000 |       38 |       --- |             --- |
-| Signals        |     0.013 |     4345 |       --- |             --- |
-| I/O            |     0.015 |       50 |       106 |           47.17 |
+| Clocks         |     0.015 |        3 |       --- |             --- |
+| Slice Logic    |     0.093 |    21003 |       --- |             --- |
+|   LUT as Logic |     0.084 |    13325 |     20800 |           64.06 |
+|   CARRY4       |     0.008 |     1857 |      8150 |           22.79 |
+|   Register     |    <0.001 |     2819 |     41600 |            6.78 |
+|   F7/F8 Muxes  |    <0.001 |      351 |     32600 |            1.08 |
+|   BUFG         |    <0.001 |        3 |        32 |            9.38 |
+|   Others       |     0.000 |       60 |       --- |             --- |
+| Signals        |     0.095 |    15577 |       --- |             --- |
+| Block RAM      |     0.007 |        4 |        50 |            8.00 |
+| I/O            |     0.015 |       53 |       106 |           50.00 |
 | Static Power   |     0.072 |          |           |                 |
-| Total          |     0.122 |          |           |                 |
+| Total          |     0.298 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -73,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.044 |       0.035 |      0.010 |
+| Vccint    |       1.000 |     0.220 |       0.210 |      0.010 |
 | Vccaux    |       1.800 |     0.013 |       0.001 |      0.013 |
 | Vcco33    |       3.300 |     0.005 |       0.004 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -82,7 +83,7 @@ Table of Contents
 | Vcco135   |       1.350 |     0.000 |       0.000 |      0.000 |
 | Vcco12    |       1.200 |     0.000 |       0.000 |      0.000 |
 | Vccaux_io |       1.800 |     0.000 |       0.000 |      0.000 |
-| Vccbram   |       1.000 |     0.000 |       0.000 |      0.000 |
+| Vccbram   |       1.000 |     0.001 |       0.001 |      0.000 |
 | MGTAVcc   |       1.000 |     0.000 |       0.000 |      0.000 |
 | MGTAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |
 | Vccadc    |       1.800 |     0.020 |       0.000 |      0.020 |
@@ -96,7 +97,7 @@ Table of Contents
 | User Input Data             | Confidence | Details                                                | Action                                                                                                             |
 +-----------------------------+------------+--------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 | Design implementation state | High       | Design is routed                                       |                                                                                                                    |
-| Clock nodes activity        | Low        | User specified less than 75% of clocks                 | Provide missing clock activity with a constraint file, simulation results or by editing the "By Clock Domain" view |
+| Clock nodes activity        | Medium     | More than 5% of clocks are missing user specification  | Provide missing clock activity with a constraint file, simulation results or by editing the "By Clock Domain" view |
 | I/O nodes activity          | Low        | More than 75% of inputs are missing user specification | Provide missing input activity with simulation results or by editing the "By Resource Type -> I/Os" view           |
 | Internal nodes activity     | Medium     | User specified less than 25% of internal nodes         | Provide missing internal nodes activity with simulation results or by editing the "By Resource Type" views         |
 | Device models               | High       | Device models are Production                           |                                                                                                                    |
@@ -142,13 +143,20 @@ Table of Contents
 +-------------------------------------------+-----------+
 | Name                                      | Power (W) |
 +-------------------------------------------+-----------+
-| sorting_visualizer_top                    |     0.050 |
-|   bubble_btn_debouncer                    |     0.002 |
+| sorting_visualizer_top                    |     0.226 |
+|   bubble_btn_debouncer                    |     0.001 |
 |   bubble_clk_div                          |    <0.001 |
-|   bubble_fsm                              |     0.005 |
-|   bubble_tutorial                         |     0.008 |
-|   merge_controller                        |     0.008 |
-|   merge_display_engine                    |    <0.001 |
+|   bubble_fsm                              |     0.003 |
+|   bubble_tutorial                         |     0.005 |
+|   insertion_clk_gen                       |    <0.001 |
+|   insertion_frame_buffer                  |     0.008 |
+|   insertion_main_fsm                      |    <0.001 |
+|   insertion_renderer                      |     0.140 |
+|   insertion_sort_engine                   |     0.010 |
+|   insertion_tut_input_engine              |    <0.001 |
+|   insertion_tut_sort_engine               |     0.002 |
+|   merge_controller                        |     0.003 |
+|   merge_display_engine                    |     0.003 |
 |     answer_box_gen[0].answer_box_renderer |    <0.001 |
 |     answer_box_gen[1].answer_box_renderer |    <0.001 |
 |     answer_box_gen[2].answer_box_renderer |    <0.001 |
@@ -161,7 +169,10 @@ Table of Contents
 |     box_gen[3].box_renderer               |    <0.001 |
 |     box_gen[4].box_renderer               |    <0.001 |
 |     box_gen[5].box_renderer               |    <0.001 |
-|   oled_display                            |     0.009 |
+|   oled_display                            |     0.018 |
+|   selection_clk_div_1ms                   |    <0.001 |
+|   selection_controller                    |     0.002 |
+|   selection_text_anim                     |    <0.001 |
 +-------------------------------------------+-----------+
 
 
