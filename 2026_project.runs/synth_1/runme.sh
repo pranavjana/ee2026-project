@@ -40,4 +40,4 @@ EAStep()
      fi
 }
 
-EAStep vivado -log bubble_sort_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source bubble_sort_top.tcl
+EAStep vivado -log sorting_visualizer_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source sorting_visualizer_top.tcl
