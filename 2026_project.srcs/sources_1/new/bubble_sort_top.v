@@ -1,24 +1,34 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Top Module for Bubble Sort Visualizer
+// Top Module for Sorting Algorithm Visualizer
 // Integrates all components for OLED-based visualization on Basys 3
-// Pranav's Bubble Sort Implementation
+// Supports multiple sorting algorithms with demo and tutorial modes
 //
 // Inputs:
 //   - clk: 100 MHz system clock
 //   - sw[15:0]: Switches for control
+//     * sw[15]: Merge Sort active - displays "nrgE"
+//     * sw[14]: Insertion Sort active - displays "InSr"
+//     * sw[13]: Selection Sort active - displays "SELn"
+//     * sw[12]: Bubble Sort active - displays "bUbL"
+//     * sw[10]: Tutorial mode (when sw[10]=1 + algorithm switch, enables tutorial)
 //     * sw[1:0]: Pattern selection (00=random, 01=sorted, 10=reverse, 11=custom)
-//     * sw[12]: Bubble Sort active (Pranav) - displays "bUbL"
-//     * sw[0]: Tutorial mode (when sw[12]=1, sw[0]=1 enables tutorial)
+//     * Welcome Mode: When sw[15:12] are ALL OFF, displays welcome screen
 //   - btnU: Up button - Start/Run demo
 //   - btnC: Center button - Reset
 //   - btnD: Down button - Pause/Resume
+//   - btnL/btnR: Left/Right buttons - Tutorial navigation
 //
 // Outputs:
-//   - JC[7:0]: OLED PMOD signals
-//   - led[15:0]: Status LEDs
-//   - seg[6:0]: 7-segment display segments (shows "bUbL" when sw[12] is ON)
+//   - JC[7:0]: OLED PMOD signals (96×64 RGB565 display)
+//   - led[15:0]: Status LEDs (mirrors algorithm selection + tutorial mode)
+//   - seg[6:0]: 7-segment display segments
 //   - an[3:0]: 7-segment display anodes
+//
+// Display Modes:
+//   1. Welcome Screen: Displays user manual and algorithm selection menu
+//   2. Demo Mode: Automated sorting visualization (algorithm switch ON, sw[10] OFF)
+//   3. Tutorial Mode: Interactive learning (algorithm switch ON + sw[10] ON)
 //////////////////////////////////////////////////////////////////////////////////
 
 module bubble_sort_top(
@@ -37,7 +47,14 @@ module bubble_sort_top(
 
     // Algorithm selection
     wire bubble_sort_active = sw[12];    // Pranav's Bubble Sort
-    wire tutorial_mode = sw[12] && sw[0]; // Tutorial mode when both sw[12] and sw[0] are ON
+    wire selection_sort_active = sw[13]; // Selection Sort
+    wire insertion_sort_active = sw[14]; // Insertion Sort
+    wire merge_sort_active = sw[15];     // Merge Sort
+
+    // Welcome mode: active when ALL algorithm switches are OFF
+    wire welcome_mode = !(sw[12] | sw[13] | sw[14] | sw[15]);
+
+    wire tutorial_mode = sw[10] && (sw[12] | sw[13] | sw[14] | sw[15]); // Tutorial mode when sw[10] + any algorithm switch
 
     // Button debouncing - use 5-button module for tutorial mode
     wire btn_l_edge, btn_r_edge, btn_u_edge, btn_d_edge, btn_c_edge;
@@ -191,6 +208,7 @@ module bubble_sort_top(
     wire [13:0] pixel_index;
     wire [15:0] auto_pixel_data;
     wire [15:0] tutorial_pixel_data;
+    wire [15:0] welcome_pixel_data;
     wire [15:0] pixel_data;
     wire [15:0] pixel_data_gated;
 
@@ -199,7 +217,7 @@ module bubble_sort_top(
         .ClkFreq(6250000)
     ) oled (
         .clk(clk_oled),
-        .reset(btn_reset_edge || !bubble_sort_active),  // Reset OLED when sw[12] is OFF
+        .reset(btn_reset_edge),  // Only reset on button press, not when switching modes
         .frame_begin(frame_begin),
         .sending_pixels(sending_pixels),
         .sample_pixel(sample_pixel),
@@ -251,20 +269,42 @@ module bubble_sort_top(
         .pixel_data(tutorial_pixel_data)
     );
 
-    // Mux pixel data based on mode
-    assign pixel_data = tutorial_mode ? tutorial_pixel_data : auto_pixel_data;
+    // Welcome screen pixel generator instantiation
+    welcome_screen_pixel_generator welcome_pix_gen (
+        .pixel_index(pixel_index),
+        .pixel_data(welcome_pixel_data)
+    );
 
-    // Gate pixel data - only show when sw[12] is ON
-    assign pixel_data_gated = bubble_sort_active ? pixel_data : 16'h0000;
+    // Mux pixel data based on mode priority:
+    // 1. Welcome mode (when all algorithm switches are OFF)
+    // 2. Tutorial mode (when sw[12] and sw[0] are ON)
+    // 3. Auto-sort mode (when sw[12] is ON)
+    assign pixel_data = welcome_mode ? welcome_pixel_data :
+                       (tutorial_mode ? tutorial_pixel_data : auto_pixel_data);
+
+    // Always show pixel data (no gating) - welcome screen is always active
+    assign pixel_data_gated = pixel_data;
 
     // LED indicators
     reg [15:0] led_reg;
     assign led = led_reg;
 
     always @(*) begin
-        led_reg = 16'h0000;                // Turn off all LEDs by default
-        led_reg[12] = bubble_sort_active;  // LED[12] ON when sw[12] is ON
-        led_reg[0] = tutorial_mode;        // LED[0] ON when tutorial mode active
+        led_reg = 16'h0000;                   // Turn off all LEDs by default
+
+        if (welcome_mode) begin
+            // Alternating pattern for welcome mode (decorative)
+            led_reg[0] = 1'b1;
+            led_reg[2] = 1'b1;
+            led_reg[4] = 1'b1;
+            led_reg[6] = 1'b1;
+        end else begin
+            led_reg[12] = bubble_sort_active;     // LED[12] ON when sw[12] is ON
+            led_reg[13] = selection_sort_active;  // LED[13] ON when sw[13] is ON
+            led_reg[14] = insertion_sort_active;  // LED[14] ON when sw[14] is ON
+            led_reg[15] = merge_sort_active;      // LED[15] ON when sw[15] is ON
+            led_reg[0] = tutorial_mode;           // LED[0] ON when tutorial mode active
+        end
     end
 
     // 7-segment display controller
@@ -281,7 +321,13 @@ module bubble_sort_top(
 
     // Display characters based on mode and state
     always @(*) begin
-        if (tutorial_mode) begin
+        if (welcome_mode) begin
+            // Display "HELo" when in welcome mode (reversed for display)
+            display_char[3] = 8'h76;  // 'H' = 0b01110110 (leftmost)
+            display_char[2] = 8'h79;  // 'E' = 0b01111001
+            display_char[1] = 8'h38;  // 'L' = 0b00111000
+            display_char[0] = 8'h5c;  // 'o' = 0b01011100 (rightmost)
+        end else if (tutorial_mode) begin
             // Display "tutr" when in tutorial mode
             display_char[3] = 8'h78;  // 't' = 0b01111000 (leftmost)
             display_char[2] = 8'h3e;  // 'u' = 0b00111110
@@ -293,6 +339,24 @@ module bubble_sort_top(
             display_char[2] = 8'h3e;  // 'U' = 0b00111110
             display_char[1] = 8'h7c;  // 'b' = 0b01111100
             display_char[0] = 8'h38;  // 'L' = 0b00111000 (rightmost)
+        end else if (selection_sort_active) begin
+            // Display "SELn" when sw[13] is ON
+            display_char[3] = 8'h6d;  // 'S' = 0b01101101 (leftmost)
+            display_char[2] = 8'h79;  // 'E' = 0b01111001
+            display_char[1] = 8'h38;  // 'L' = 0b00111000
+            display_char[0] = 8'h54;  // 'n' = 0b01010100 (rightmost)
+        end else if (insertion_sort_active) begin
+            // Display "InSr" when sw[14] is ON
+            display_char[3] = 8'h06;  // 'I' = 0b00000110 (leftmost)
+            display_char[2] = 8'h54;  // 'n' = 0b01010100
+            display_char[1] = 8'h6d;  // 'S' = 0b01101101
+            display_char[0] = 8'h50;  // 'r' = 0b01010000 (rightmost)
+        end else if (merge_sort_active) begin
+            // Display "nrg" when sw[15] is ON
+            display_char[3] = 8'h54;  // 'n' = 0b01010100 (leftmost)
+            display_char[2] = 8'h50;  // 'r' = 0b01010000
+            display_char[1] = 8'h6F;  // 'g' = 0b01101111
+            display_char[0] = 8'h79;  // 'E' = 0b01111001 (rightmost)
         end else if (done) begin
             // Show "done" pattern
             display_char[3] = 8'h5e;  // 'd'
